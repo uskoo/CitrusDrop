@@ -73,7 +73,7 @@ class CitrusDrop:
 
     # APIの残量とリセット時間をカウントし、送信制御する
     # TODO:threadingで回すようにする
-    def update_followers_dict(self,):
+    def update_followers_dict(self):
         # フォロワー数を取得
         if self.followers_count == -1:
             self.get_followers_count()
@@ -117,7 +117,7 @@ class CitrusDrop:
             with codecs.open('./idol_name_list.json', 'r', 'utf-8') as f:
                 idol_name_list = json.load(f)
             # {'idol_name': 'xxxxx', 'count': xxx}, ...
-            d = {'screen_name': user_dict['screen_name'], 'decription': user_dict['description'], 'idol_count': []}
+            d = {'screen_name': user_dict['screen_name'], 'description': user_dict['description'], 'idol_count': []}
             for idol_name in idol_name_list:
                 count = 0
                 for c in idol_name.values():
