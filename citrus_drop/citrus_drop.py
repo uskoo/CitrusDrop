@@ -39,7 +39,7 @@ class CitrusDrop:
 
             self.cursor = json_dict['next_cursor']
         else:
-            print("status code", res.status_code) # status code 429: Too much requests
+            print("status code", res.status_code)  # status code 429: Too much requests
 
     # followerの数をカウントし、followers_countに入れる
     def get_followers_count(self):
@@ -142,7 +142,7 @@ class CitrusDrop:
             if count > 1:
                 idol_count = {'idol_name': idol_name["name"], 'count': count}
                 d.append(idol_count)
-        return sorted(d, key=lambda x:x['count'], reverse=True)
+        return sorted(d, key=lambda x: x['count'], reverse=True)
 
 
 if __name__ == '__main__':
