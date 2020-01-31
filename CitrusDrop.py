@@ -14,7 +14,7 @@ class CitrusDrop:
         ATS = config.ACCESS_TOKEN_SECRET
         self.twitter = OAuth1Session(CK, CS, AT, ATS)
         self.followers_dict = []    # twitterから取得したProfileそのもの
-        self.followers_dict_light = [] # profileを必要なものに絞ったやつ
+        self.followers_dict_light = []  # profileを必要なものに絞ったやつ
         self.followers_count = -1   # /followers/ids から取得したfollowerの数 = twitterのfollower数 -1:未取得
         self.dict_count = 0         # /followers/list から取得済みのdictの数
         self.cursor = -1            # /followers/list 読み込み用のcursor値 -1:未取得, 0:取得完了, その他の値:カーソル位置

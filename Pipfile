@@ -1,0 +1,24 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+mypy = "*"
+pytest = "*"
+autopep8 = "*"
+isort = "*"
+tox = "*"
+
+[packages]
+flask = "*"
+gunicorn = "*"
+
+[requires]
+python_version = "3.7"
+
+[scripts]
+test = "pytest"
+lint = "flake8 --show-source ."
+format = "autopep8 -ivr ."
