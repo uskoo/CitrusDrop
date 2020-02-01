@@ -21,13 +21,49 @@
         <header>
             <div class="navbar navbar-dark bg-dark box-shadow">
                 <div class="container d-flex justify-content-between">
-                    {% block navbar %}
-                    {% endblock %}
+                    <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-1">
+                        <a class="navbar-brand" href="/">
+                        <img src="/static/citrus_drop.png" height=50px width=50px>
+                        <strong>Citrus Drop</strong></a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        {% block navbar %}
+                        {% endblock %}
+                    </nav>
                 </div>
             </div>
         </header>
+        <div class="container">
+            <div class="row p-3">
+                <div class="col-1">
+                    <img src={{ message.profile_image_url}} class="img-fluid" style="max-width: 100%; , height: auto;">
+                </div>
+                <div class="col-1">
+                    <div class="row">name</div>
+                    <div class="row">following</div>
+                    <div class="row">followed</div>
+                </div>
+                <div class="col-1">
+                    <div class="row">{{ message.screen_name }}</div>
+                    <div class="row">{{ message.followers_count }}</div>
+                    <div class="row">{{ message.friends_count }}</div>
+                </div>
+                <div class="col-3">
+                    <div class="row"><button type="button" class="btn btn-primary btn-sm">Update</button></div>
+                    <div class="row">last update: {{ message.last_update }}</div>
+                </div>
+            </div>
+            <div class="row p-1">
+                <div class="col-6">
+                    {% block left %}{% endblock %}
+                </div>
+                <div class="col-6">
+                    {% block right %}{% endblock %}
+                </div>
+            </div>
+        </div>
 
-        {% block content %}{% endblock %}
         <!-- jQuery (necessary for Bootstraps's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
