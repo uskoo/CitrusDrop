@@ -8,7 +8,7 @@ import json
 from citrus_drop import CitrusDrop
 
 
-def test_get_followers():
+if __name__ == '__main__':
     with open('idol_name_list.json', 'r') as f:
         idol_name_list = json.load(f)
     
