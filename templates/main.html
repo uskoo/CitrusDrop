@@ -37,24 +37,16 @@
 
             // コールバック関数の実装
             function drawChart(){
-                var req = new XMLHttpRequest();
                 var data = new google.visualization.DataTable();
-
-
                 data.addColumn('string', 'idol_name');
                 data.addColumn('number', 'count');
-                req.onreadystatechange = function()
-                {
-                    var x = JSON.parse(req.responseText || "null");
-                    if(x != null) var len = x.length;
-                    else var len = 0;
+                var x = {{ message.result|tojson }};
+                if(x != null) var len = x.length;
+                else var len = 0;
 
-                    for(var i=0; i<len; i++){
-                        data.addRow([x[i].idol_name, x[i].count]);
-                    }
+                for(var i=0; i<len; i++){
+                    data.addRow([x[i].idol_name, x[i].count]);
                 }
-                req.open("GET", "/static/test.json", false);
-                req.send(null);
 
                 var options = {
                     title: 'Idol Count',
@@ -81,24 +73,16 @@
 
             // コールバック関数の実装
             function drawChart(){
-                var req = new XMLHttpRequest();
                 var data = new google.visualization.DataTable();
-
-
                 data.addColumn('string', 'idol_name');
                 data.addColumn('number', 'count');
-                req.onreadystatechange = function()
-                {
-                    var x = JSON.parse(req.responseText || "null");
-                    if(x != null) var len = x.length;
-                    else var len = 0;
+                var x = {{ message.result|tojson }};
+                if(x != null) var len = x.length;
+                else var len = 0;
 
-                    for(var i=0; i<len; i++){
-                        data.addRow([x[i].idol_name, x[i].count]);
-                    }
+                for(var i=0; i<len; i++){
+                    data.addRow([x[i].idol_name, x[i].count]);
                 }
-                req.open("GET", "/static/test.json", false);
-                req.send(null);
 
                 var options = {
                     title: 'Idol Count',
