@@ -1,5 +1,8 @@
+#!/usr/bin/env python
+# -*- encoding:utf-8 -*-
+
+
 import json
-import config
 import time
 import datetime
 import codecs
@@ -7,12 +10,16 @@ from requests_oauthlib import OAuth1Session
 
 
 class CitrusDrop:
-    def __init__(self):
-        CK = config.CONSUMER_KEY
-        CS = config.CONSUMER_SECRET
-        AT = config.ACCESS_TOKEN
-        ATS = config.ACCESS_TOKEN_SECRET
-        self.twitter = OAuth1Session(CK, CS, AT, ATS)
+    def __init__(self, consumer_key: str, consumer_secret: str, access_token: str, access_token_secret: str):
+        """
+        
+        Args:
+            consumer_key (str): for twitter api
+            consumer_secret (str): for twitter api
+            access_token (str): for twitter api
+            access_token_secret (str): for twitter api
+        """
+        self.twitter = OAuth1Session(consumer_key, consumer_secret, access_token, access_token_secret)
         self.followers_dict = []    # twitterから取得したProfileそのもの
         self.followers_dict_light = []  # profileを必要なものに絞ったやつ
         self.followers_count = -1   # /followers/ids から取得したfollowerの数 = twitterのfollower数 -1:未取得
@@ -114,7 +121,7 @@ class CitrusDrop:
     def find_idol(self):
         for user_dict in self.followers_dict:
             description = user_dict['description']
-            with codecs.open('./idol_name_list.json', 'r', 'utf-8') as f:
+            with codecs.open('../idol_name_list.json', 'r', 'utf-8') as f:
                 idol_name_list = json.load(f)
             # {'idol_name': 'xxxxx', 'count': xxx}, ...
             d = {'screen_name': user_dict['screen_name'], 'description': user_dict['description'], 'idol_count': []}
@@ -130,7 +137,7 @@ class CitrusDrop:
 
     # 全体の属性を取得する
     def get_drop(self):
-        with codecs.open('./idol_name_list.json', 'r', 'utf-8') as f:
+        with codecs.open('../idol_name_list.json', 'r', 'utf-8') as f:
             idol_name_list = json.load(f)
 
         # {'idol_name': 'xxxxx', 'count': xxx}, ...
@@ -145,15 +152,15 @@ class CitrusDrop:
                 d.append(idol_count)
         return sorted(d, key=lambda x: x['count'], reverse=True)
 
-    def read_follower_dict(self, path='./follower_dict.json', encoding='utf-8'):
-        with codecs.open(path, 'r', encoding) as f:
-            self.followers_dict = json.load(f)
+    # def read_follower_dict(self, path='./follower_dict.json', encoding='utf-8'):
+    #     with codecs.open(path, 'r', encoding) as f:
+    #         self.followers_dict = json.load(f)
 
 
 if __name__ == '__main__':
     cd = CitrusDrop()
     # profileリストがなければ取得する
-    #cd.update_followers_dict()
+    # cd.update_followers_dict()
 
     cd.read_follower_dict()
     cd.find_idol()

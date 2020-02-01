@@ -1,3 +1,3 @@
-from .citrus_drop import *
+from .citrus_drop import CitrusDrop
 
-__ALL__ = []
+__all__ = ['CitrusDrop']
