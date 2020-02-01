@@ -13,15 +13,15 @@ with open('./static/test2.json', encoding='utf-8') as f:
 @app.route('/')
 def index():
     title = "Citrus Drop"
-
-    return render_template('main.html', title=title, message=user_info)
+    page = "index"
+    return render_template('main.html', title=title, message=user_info, page=page)
 
 
 @app.route('/donut')
 def donut():
     title = "Citrus Donut"
-    message = "Donut"
-    return render_template('donut.html', title=title, message=user_info)
+    page = "donut"
+    return render_template('donut.html', title=title, message=user_info, page=page)
 
 
 if __name__ == '__main__':

@@ -23,44 +23,8 @@
 </nav>
 {% endblock %}
 
-{% block google_chart %}
-    <script>
-        (function(){
-            'use strict';
-
-            // パッケージのロード
-            google.charts.load('current', {packages: ['corechart']});
-            // コールバックの登録
-            google.charts.setOnLoadCallback(drawChart);
-
-            // コールバック関数の実装
-            function drawChart(){
-                var data = new google.visualization.DataTable();
-                data.addColumn('string', 'idol_name');
-                data.addColumn('number', 'count');
-                var x = {{ message.result|tojson }};
-                if(x != null) var len = x.length;
-                else var len = 0;
-
-                for(var i=0; i<len; i++){
-                    data.addRow([x[i].idol_name, x[i].count]);
-                }
-                var options = {
-                    title: 'Idol Count',
-                };
-
-                // 描画用インスタンスの生成および描画メソッドの呼び出し
-                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-                chart.draw(data, options);
-                var chart = new google.visualization.ColumnChart(document.getElementById('columnchart'));
-                chart.draw(data, options);
-            }
-        })();
-    </script>
-{% endblock %}
-
 {% block left %}
-    <div id="piechart" style="width=900px; height: 600px;"></div>
+    <div id="piechart" style="width=100%; height: 600px;"></div>
 
 {% endblock %}
 {% block right %}
