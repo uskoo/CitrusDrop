@@ -10,7 +10,8 @@ from requests_oauthlib import OAuth1Session
 
 
 class CitrusDrop:
-    def __init__(self, consumer_key: str, consumer_secret: str, access_token: str, access_token_secret: str, idol_name_list: list):
+    def __init__(self, consumer_key: str, consumer_secret: str, access_token: str, access_token_secret: str,
+                 user_id: str, idol_name_list: list):
         """
         
         Args:
@@ -27,7 +28,16 @@ class CitrusDrop:
         self.cursor = -1            # /followers/list 読み込み用のcursor値 -1:未取得, 0:取得完了, その他の値:カーソル位置
         self.rate_limit_status = {}
         self.idol_name_list = idol_name_list
-        self.drop = {}              # 解析結果
+        self.user_id = user_id
+        self.drop = {
+            'user_id': '',
+            'name': '',
+            'screen_name': '',
+            'followers_count': 0,
+            'friends_count': 0,
+            'result': []
+        }              # 解析結果
+        self.set_user_profile()
 
     # followers APIをTwitterに送信する
     def get_followers(self):
@@ -109,6 +119,11 @@ class CitrusDrop:
         # with codecs.open('./follower_dict.json', 'w', 'utf-8') as f:
         #     json.dump(self.followers_dict, f, indent=4, ensure_ascii=False)
 
+    # followers dictをdictからsetする
+    def set_followers_dict(self, d: dict):
+        self.followers_dict = d
+        self.update_followers_dict_light()
+
     # 解析用に要素を絞ったdictを更新
     def update_followers_dict_light(self):
         for u in self.followers_dict:
@@ -151,7 +166,22 @@ class CitrusDrop:
             if count > 1:
                 idol_count = {'idol_name': idol_name["name"], 'count': count}
                 d.append(idol_count)
-        return sorted(d, key=lambda x: x['count'], reverse=True)
+        self.drop['result'] = sorted(d, key=lambda x: x['count'], reverse=True)
+        return self.drop
+
+    # Twitterのidからname, screen_name, followers_count, friends_countを設定する
+    def set_user_profile(self):
+        url = "https://api.twitter.com/1.1/users/show.json"
+        params = {'user_id': self.user_id}
+        res = self.twitter.get(url, params=params)
+
+        if res.status_code == 200:
+            json_dict = json.loads(res.text)
+            self.drop['user_id'] = json_dict['id_str']
+            self.drop['name'] = json_dict['name']
+            self.drop['screen_name'] = json_dict['screen_name']
+            self.drop['followers_count'] = json_dict['followers_count']
+            self.drop['friends_count'] = json_dict['friends_count']
 
     # def read_follower_dict(self, path='./follower_dict.json', encoding='utf-8'):
     #     with codecs.open(path, 'r', encoding) as f:
