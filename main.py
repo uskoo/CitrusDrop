@@ -63,6 +63,7 @@ user_drop = {
 # TODO: updateを非同期にする
 @app.route('/update', methods=['GET'])
 def update():
+    global cd
     cd.update_followers_dict()
     global user_drop
     user_drop = cd.get_drop()
