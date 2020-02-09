@@ -1,7 +1,9 @@
 import json
 import os
-import codecs
-from flask import Flask
+from urllib.parse import parse_qsl
+
+from requests_oauthlib import OAuth1Session
+from flask import Flask, jsonify, request
 from flask import render_template
 from citrus_drop import CitrusDrop
 
@@ -14,8 +16,14 @@ cs = os.environ.get('TWITTER_CONSUMER_SECRET')
 at = os.environ.get('TWITTER_ACCESS_TOKEN')
 ats = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET')
 
-with codecs.open('./idol_name_list.json', 'r', 'utf-8') as f:
+base_url = 'https://api.twitter.com/'
+request_token_url = base_url + 'oauth/request_token'
+authenticate_url = base_url + 'oauth/authenticate'
+access_token_url = base_url + 'oauth/access_token'
+
+with open('./idol_name_list.json', 'r', encoding='utf-8') as f:
     idol_name_list = json.load(f)
+
 
 # TODO: Twitter認証処理後に、access_tokenと同時にid_strを取得して、CitrusDropを初期化する
 # 以下は仮のID
@@ -42,7 +50,7 @@ except FileNotFoundError:
         'result': []
     }
 
-# TODO: updateボタンを押したらCitrusDropの更新処理を実行する
+# TODO: updateを非同期にする
 @app.route('/update')
 def update():
     cd.update_followers_dict()
@@ -55,6 +63,32 @@ def update():
 
 
 # TODO: Twitter認証処理を入れる
+@app.route('/twitter/request_token', methods=['GET'])
+def get_twitter_request_token():
+    oauth_callback = request.args.get('oauth_callback')
+    twitter = OAuth1Session(ck, cs)
+    res = twitter.post(request_token_url, params={'oauth_callback': oauth_callback})
+    request_token = dict(parse_qsl(res.content.decode('utf-8')))
+
+    authenticate_endpoint = '%s?oauth_tokekn=%s' \
+    % (authenticate_url, request_token['oauth_token'])
+
+    request_token.update({'authenticate_endpoint': authenticate_endpoint})
+
+    return jsonify(request_token)
+
+
+@app.route('/twitter/access_token', methods=['GET'])
+def get_twitter_access_token():
+    oauth_token = request.args.get('oauth_token')
+    oauth_verifier = request.args.get('oauth_verifier')
+
+    twitter = OAuth1Session(ck, cs, oauth_token, oauth_verifier)
+    res = twitter.post(access_token_url, params={'oauth_verifier': oauth_verifier})
+    access_token = dict(parse_qsl(res.content.decode('utf-8')))
+
+    return jsonify(access_token)
+
 
 @app.route('/')
 def index():
