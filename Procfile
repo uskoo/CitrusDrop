@@ -1,2 +1,1 @@
-[aside type="boader"]web:gunicorn apl_name:main
-[/aside]
+web: gunicorn main:app --log-file -
