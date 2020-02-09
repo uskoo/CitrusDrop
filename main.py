@@ -3,13 +3,12 @@ import os
 from urllib.parse import parse_qsl
 
 from requests_oauthlib import OAuth1Session
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, request, redirect, url_for
 from flask import render_template
 from citrus_drop import CitrusDrop
 
 
 app = Flask(__name__)
-
 
 ck = os.environ.get('TWITTER_CONSUMER_KEY')
 cs = os.environ.get('TWITTER_CONSUMER_SECRET')
@@ -91,11 +90,13 @@ def get_twitter_access_token():
     res = twitter.post(access_token_url, params={'oauth_verifier': oauth_verifier})
     access_token = dict(parse_qsl(res.content.decode('utf-8')))
 
-    return jsonify(access_token)
+    return redirect(url_for('/', messages=jsonify(access_token)))
 
 
 @app.route('/')
 def index():
+    messages = request.args['messages']
+    print(messages)
     title = "CitrusDrop"
     page = "index"
     return render_template('index.html', title=title, message=user_drop, page=page)
