@@ -29,8 +29,8 @@ with open('./idol_name_list.json', 'r', encoding='utf-8') as f:
 twitter_user_id = '101991197'
 
 # CitrusDrop初期化
-cd = CitrusDrop(consumer_key=ck, consumer_secret=cs, access_token=at,
-                access_token_secret=ats, idol_name_list=idol_name_list, user_id=twitter_user_id)
+# cd = CitrusDrop(consumer_key=ck, consumer_secret=cs, access_token=at,
+#               access_token_secret=ats, idol_name_list=idol_name_list, user_id=twitter_user_id)
 
 # キャッシュがあったらとりあえず表示だけするためuser_infoをロードする処理
 path = './static/' + twitter_user_id + '.json'
@@ -48,6 +48,7 @@ except FileNotFoundError:
         'friends_count': '未取得',
         'result': []
     }
+
 
 # TODO: updateを非同期にする
 @app.route('/update')
@@ -90,10 +91,32 @@ def get_twitter_access_token():
     res = twitter.post(access_token_url, params={'oauth_verifier': oauth_verifier})
     access_token = dict(parse_qsl(res.content.decode('utf-8')))
 
-    return redirect(url_for('main', messages="access_token"))
+    global cd
+    cd = CitrusDrop(consumer_key=ck, consumer_secret=cs, access_token=access_token['oauth_token'],
+                    access_token_secret=access_token['oauth_token_secret'],
+                    idol_name_list=idol_name_list, user_id=access_token['user_id'])
+
+    # キャッシュがあったらとりあえず表示だけするためuser_infoをロードする処理
+    path = './static/' + access_token['user_id'] + '.json'
+
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            user_drop = json.load(f)
+            print(user_drop)
+    except FileNotFoundError:
+        user_drop = {
+            'screen_name': '未取得',
+            'last_update': '-',
+            'profile_image_url': './static/not_found.png',
+            'followers_count': '未取得',
+            'friends_count': '未取得',
+            'result': []
+        }
+
+    return redirect(url_for('main'))
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     title = "CitrusDrop"
     page = "index"
