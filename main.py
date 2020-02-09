@@ -64,16 +64,31 @@ user_drop = {
 # TODO: updateを非同期にする
 @app.route('/update', methods=['GET'])
 def update():
+    loop = asyncio.get_event_loop()
+    loop.create_task(update_dict())
+
+    title = "CitrusDrop"
+    page = "index"
+
+    return render_template('main.html', title=title, message=user_drop, page=page)
+
+
+async def update_dict():
     global cd
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(cd.update_followers_dict())
+    await loop.create_task(cd.update_followers_dict())
+
     global user_drop
     user_drop = cd.get_drop()
+
+    global path
     path = './static/' + request.args.get('user_id')
     with open(path, 'w', encoding='utf-8') as f:
         f.write(json.dumps(user_drop, indent=4, ensure_ascii=False))
+
     title = "CitrusDrop"
     page = "index"
+
     return render_template('main.html', title=title, message=user_drop, page=page)
 
 
