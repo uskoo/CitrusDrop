@@ -1,6 +1,7 @@
 import json
 import os
 from urllib.parse import parse_qsl
+import asyncio
 
 from requests_oauthlib import OAuth1Session
 from flask import Flask, jsonify, request, redirect, url_for
@@ -64,7 +65,8 @@ user_drop = {
 @app.route('/update', methods=['GET'])
 def update():
     global cd
-    cd.update_followers_dict()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(cd.update_followers_dict())
     global user_drop
     user_drop = cd.get_drop()
     path = './static/' + request.args.get('user_id')
