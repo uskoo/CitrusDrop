@@ -26,20 +26,32 @@ cd = CitrusDrop(consumer_key=ck, consumer_secret=cs, access_token=at,
                 access_token_secret=ats, idol_name_list=idol_name_list, user_id=twitter_user_id)
 
 # キャッシュがあったらとりあえず表示だけするためuser_infoをロードする処理
-# TODO: 対象ファイルがなかった場合の処理を追加する
 path = './static/' + twitter_user_id + '.json'
 
-with open(path, encoding='utf-8') as f:
-    user_info = json.load(f)
-
+try:
+    with open(path, 'r', encoding='utf-8') as f:
+        user_drop = json.load(f)
+        print(user_drop)
+except FileNotFoundError:
+    user_drop = {
+        'screen_name': '未取得',
+        'last_update': '-',
+        'profile_image_url': './static/not_found.png',
+        'followers_count': '未取得',
+        'friends_count': '未取得',
+        'result': []
+    }
 
 # TODO: updateボタンを押したらCitrusDropの更新処理を実行する
 @app.route('/update')
 def update():
     cd.update_followers_dict()
+    user_drop = cd.get_drop()
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(user_drop, indent=4, ensure_ascii=False))
     title = "CitrusDrop"
     page = "index"
-    return render_template('main.html', title=title, message=user_info, page=page)
+    return render_template('main.html', title=title, message=user_drop, page=page)
 
 
 # TODO: Twitter認証処理を入れる
@@ -48,24 +60,24 @@ def update():
 def index():
     title = "CitrusDrop"
     page = "index"
-    return render_template('main.html', title=title, message=user_info, page=page)
+    return render_template('main.html', title=title, message=user_drop, page=page)
 
 
 @app.route('/donut')
 def donut():
     title = "CitrusDonut"
     page = "donut"
-    return render_template('donut.html', title=title, message=user_info, page=page)
+    return render_template('donut.html', title=title, message=user_drop, page=page)
 
 
 @app.route('/save')
 def save_drop():
     title = "save!"
     page = "save!"
-    with open('write_drop_test.json', 'w', encoding='utf-8') as f:
+    with open(path, 'w', encoding='utf-8') as f:
         d = cd.get_drop()
         f.write(json.dumps(d, indent=4, ensure_ascii=False))
-    return render_template('main.html', title=title, message=user_info, page=page)
+    return render_template('main.html', title=title, message=user_drop, page=page)
 
 
 if __name__ == '__main__':

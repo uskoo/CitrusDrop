@@ -5,6 +5,7 @@
 import json
 import time
 import datetime
+import asyncio
 # import codecs
 from requests_oauthlib import OAuth1Session
 
@@ -33,6 +34,8 @@ class CitrusDrop:
             'user_id': '',
             'name': '',
             'screen_name': '',
+            'profile_image_url': '',
+            'last_update': '',
             'followers_count': 0,
             'friends_count': 0,
             'result': []
@@ -180,6 +183,8 @@ class CitrusDrop:
             self.drop['user_id'] = json_dict['id_str']
             self.drop['name'] = json_dict['name']
             self.drop['screen_name'] = json_dict['screen_name']
+            self.drop['profile_image_url'] = str(json_dict['profile_image_url']).replace('_normal', '')
+            self.drop['last_update'] = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
             self.drop['followers_count'] = json_dict['followers_count']
             self.drop['friends_count'] = json_dict['friends_count']
 
