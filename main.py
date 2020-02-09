@@ -3,7 +3,7 @@ import os
 from urllib.parse import parse_qsl
 
 from requests_oauthlib import OAuth1Session
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect
 from flask import render_template
 from citrus_drop import CitrusDrop
 
@@ -70,12 +70,13 @@ def get_twitter_request_token():
     res = twitter.post(request_token_url, params={'oauth_callback': oauth_callback})
     request_token = dict(parse_qsl(res.content.decode('utf-8')))
 
-    authenticate_endpoint = '%s?oauth_tokekn=%s' \
+    authenticate_endpoint = '%s?oauth_token=%s' \
     % (authenticate_url, request_token['oauth_token'])
 
     request_token.update({'authenticate_endpoint': authenticate_endpoint})
+    #return jsonify(request_token)
 
-    return jsonify(request_token)
+    return redirect(authenticate_endpoint)
 
 
 @app.route('/twitter/access_token', methods=['GET'])
@@ -94,7 +95,7 @@ def get_twitter_access_token():
 def index():
     title = "CitrusDrop"
     page = "index"
-    return render_template('main.html', title=title, message=user_drop, page=page)
+    return render_template('index.html', title=title, message=user_drop, page=page)
 
 
 @app.route('/donut')
