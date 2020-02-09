@@ -74,9 +74,9 @@ def get_twitter_request_token():
     % (authenticate_url, request_token['oauth_token'])
 
     request_token.update({'authenticate_endpoint': authenticate_endpoint})
-    #return jsonify(request_token)
+    return jsonify(request_token)
 
-    return redirect(authenticate_endpoint)
+    #return redirect(authenticate_endpoint)
 
 
 @app.route('/twitter/access_token', methods=['GET'])
@@ -96,6 +96,13 @@ def index():
     title = "CitrusDrop"
     page = "index"
     return render_template('index.html', title=title, message=user_drop, page=page)
+
+
+@app.route('/main')
+def main():
+    title= "CitrusDrop"
+    page= "main"
+    return render_template('main.html', title=title, message=user_drop, page=page)
 
 
 @app.route('/donut')
