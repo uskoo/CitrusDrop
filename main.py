@@ -90,13 +90,11 @@ def get_twitter_access_token():
     res = twitter.post(access_token_url, params={'oauth_verifier': oauth_verifier})
     access_token = dict(parse_qsl(res.content.decode('utf-8')))
 
-    return redirect(url_for('/', messages=jsonify(access_token)))
+    return redirect(url_for('/main', messages=jsonify(access_token)))
 
 
 @app.route('/')
 def index():
-    messages = request.args['messages']
-    print(messages)
     title = "CitrusDrop"
     page = "index"
     return render_template('index.html', title=title, message=user_drop, page=page)
@@ -104,6 +102,8 @@ def index():
 
 @app.route('/main')
 def main():
+    messages = request.args['messages']
+    print(messages)
     title= "CitrusDrop"
     page= "main"
     return render_template('main.html', title=title, message=user_drop, page=page)
