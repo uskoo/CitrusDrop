@@ -64,7 +64,7 @@ def update():
 # TODO: Twitter認証処理を入れる
 @app.route('/twitter/request_token', methods=['GET'])
 def get_twitter_request_token():
-    oauth_callback ="https://citrus-drop.herokuapp.com/twitter/access_token"
+    oauth_callback ="https://citrus-drop.herokuapp.com/twitter/access_token/"
     #oauth_callback = request.args.get('oauth_callback')
     print(oauth_callback)
     twitter = OAuth1Session(ck, cs)
