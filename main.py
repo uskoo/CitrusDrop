@@ -90,7 +90,7 @@ def get_twitter_access_token():
     res = twitter.post(access_token_url, params={'oauth_verifier': oauth_verifier})
     access_token = dict(parse_qsl(res.content.decode('utf-8')))
 
-    return redirect(url_for('main', messages=jsonify(access_token)))
+    return redirect(url_for('main', messages="access_token"))
 
 
 @app.route('/')
@@ -102,10 +102,8 @@ def index():
 
 @app.route('/main')
 def main():
-    messages = request.args['messages']
-    print(messages)
-    title= "CitrusDrop"
-    page= "main"
+    title = "CitrusDrop"
+    page = "main"
     return render_template('main.html', title=title, message=user_drop, page=page)
 
 
@@ -123,6 +121,20 @@ def save_drop():
     with open(path, 'w', encoding='utf-8') as f:
         d = cd.get_drop()
         f.write(json.dumps(d, indent=4, ensure_ascii=False))
+    return render_template('main.html', title=title, message=user_drop, page=page)
+
+
+@app.route('/test')
+def test():
+    title = "CitrusDonut"
+    page = "donut"
+    return url_for('test2', 'aaa', 'bbb')
+
+
+@app.route('/test2')
+def test2():
+    title = "CitrusDonut"
+    page = "donut"
     return render_template('main.html', title=title, message=user_drop, page=page)
 
 
