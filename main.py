@@ -90,7 +90,7 @@ def get_twitter_access_token():
     res = twitter.post(access_token_url, params={'oauth_verifier': oauth_verifier})
     access_token = dict(parse_qsl(res.content.decode('utf-8')))
 
-    return redirect(url_for('/main', messages=jsonify(access_token)))
+    return redirect(url_for('main', messages=jsonify(access_token)))
 
 
 @app.route('/')
