@@ -75,10 +75,10 @@ def get_twitter_request_token():
     authenticate_endpoint = '%s?oauth_token=%s' \
     % (authenticate_url, request_token['oauth_token'])
 
-    request_token.update({'authenticate_endpoint': authenticate_endpoint})
-    return jsonify(request_token)
+    #request_token.update({'authenticate_endpoint': authenticate_endpoint})
+    #return jsonify(request_token)
 
-    #return redirect(authenticate_endpoint)
+    return redirect(authenticate_endpoint)
 
 
 @app.route('/twitter/access_token', methods=['GET'])
