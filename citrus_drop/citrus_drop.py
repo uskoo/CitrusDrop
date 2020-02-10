@@ -106,9 +106,6 @@ class CitrusDrop:
 
         self.update_followers_dict_light()
 
-        # with codecs.open('./follower_dict.json', 'w', 'utf-8') as f:
-        #     json.dump(self.followers_dict, f, indent=4, ensure_ascii=False)
-
     # 解析用に要素を絞ったdictを更新
     def update_followers_dict_light(self):
         for u in self.followers_dict:
@@ -122,9 +119,6 @@ class CitrusDrop:
     def find_idol(self):
         for user_dict in self.followers_dict:
             description = user_dict['description']
-            # with codecs.open('../idol_name_list.json', 'r', 'utf-8') as f:
-            #     idol_name_list = json.load(f)
-            # {'idol_name': 'xxxxx', 'count': xxx}, ...
             d = {'screen_name': user_dict['screen_name'], 'description': user_dict['description'], 'idol_count': []}
             for idol_name in self.idol_name_list:
                 count = 0
@@ -153,18 +147,8 @@ class CitrusDrop:
                 d.append(idol_count)
         return sorted(d, key=lambda x: x['count'], reverse=True)
 
-    # def read_follower_dict(self, path='./follower_dict.json', encoding='utf-8'):
-    #     with codecs.open(path, 'r', encoding) as f:
-    #         self.followers_dict = json.load(f)
+    def _search_fullname(self, text: str):
+        return [fullname['name'] for fullname in self.idol_name_list if text.find(fullname['name']) >= 0]
 
+    # def _search_partname(self, text: str):
 
-# if __name__ == '__main__':
-    # cd = CitrusDrop()
-    # profileリストがなければ取得する
-    # cd.update_followers_dict()
-
-    # cd.read_follower_dict()
-    # cd.find_idol()
-
-    # drop = cd.get_drop()
-    # print(json.dumps(drop, indent=4, ensure_ascii=False))

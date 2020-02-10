@@ -4,11 +4,11 @@ from flask import render_template
 from citrus_drop import CitrusDrop
 
 
-
 app = Flask(__name__)
 
 with open('./static/test2.json', encoding='utf-8') as f:
     user_info = json.load(f)
+
 
 @app.route('/')
 def index():
@@ -26,4 +26,3 @@ def donut():
 
 if __name__ == '__main__':
     app.run()
-
