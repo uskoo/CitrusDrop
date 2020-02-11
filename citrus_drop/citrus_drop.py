@@ -28,6 +28,7 @@ class CitrusDrop:
         self.rate_limit_status = {}
         self.idol_name_list = idol_name_list
         self.drop = {}              # 解析結果
+        self.ng_name_list = ['愛', '関', '礼', '優', '心', '海', '星']
 
     # followers APIをTwitterに送信する
     def get_followers(self):
@@ -148,7 +149,15 @@ class CitrusDrop:
         return sorted(d, key=lambda x: x['count'], reverse=True)
 
     def _search_fullname(self, text: str):
-        return [fullname['name'] for fullname in self.idol_name_list if text.find(fullname['name']) >= 0]
+        return [profile for profile in self.idol_name_list if text.find(profile['name']) >= 0]
 
-    # def _search_partname(self, text: str):
+    def _search_partname(self, text: str):
+        idol_name_list = self.idol_name_list
 
+        output_list = []
+
+        for key in ['given_name', 'family_name']:
+            idol_name_list = filter(lambda x: x[key] not in self.ng_name_list, idol_name_list)
+            output_list += filter(lambda x: text.find(x[key] >= 0), idol_name_list)
+
+        return output_list

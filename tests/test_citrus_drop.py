@@ -26,3 +26,22 @@ def test_search_fullname():
 
     for t in TESTS:
         assert all([c in t[1] for c in cd._search_fullname(t[0])])
+
+
+def test_search_partname():
+    TESTS = [
+        ['ただの通りすがりの星梨花Pです。\nラウンジ【中二病奥義・三曲の極み】のラウマス。星梨花さんと日本酒の普及に努めるアラサー。ありがとうミリオンライブ!\n\nミリシタID:2833KPT2\n\n\n質問箱→https://t.co/6y2UByvDsj', ['箱崎星梨花']],
+    ]
+
+    with open('idol_name_list.json', 'r') as f:
+        idol_name_list = json.load(f)
+
+    cd = CitrusDrop(os.environ['TWITTER_CONSUMER_KEY'],
+                    os.environ['TWITTER_CONSUMER_SECRET'],
+                    os.environ['TWITTER_ACCESS_TOKEN'],
+                    os.environ['TWITTER_ACCESS_TOKEN_SECRET'],
+                    idol_name_list
+                    )
+
+    for t in TESTS:
+        print(cd._search_partname(t[0]))
