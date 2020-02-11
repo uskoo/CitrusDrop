@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- encoding:utf-8 -*-
 
-
 import os
 import json
 
@@ -44,4 +43,4 @@ def test_search_partname():
                     )
 
     for t in TESTS:
-        print(cd._search_partname(t[0]))
+        data = cd._search_partname(t[0])

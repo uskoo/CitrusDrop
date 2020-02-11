@@ -158,6 +158,6 @@ class CitrusDrop:
 
         for key in ['given_name', 'family_name']:
             idol_name_list = filter(lambda x: x[key] not in self.ng_name_list, idol_name_list)
-            output_list += filter(lambda x: text.find(x[key] >= 0), idol_name_list)
+            output_list += filter(lambda x: text.find(x[key]) >= 0, idol_name_list)
 
         return output_list
