@@ -35,6 +35,12 @@
         </header>
         <script src="https://www.gstatic.com/charts/loader.js"></script>
 
+        {% if reload == 'true' %}
+            <script language="JavaScript" type="text/javascript">
+                document.location.reload();
+            </script>
+        {% endif %}
+
         <div class="container">
             <div class="row p-3">
                 <div class="col-1">
@@ -51,7 +57,13 @@
                     <div class="row">{{ message.friends_count }}</div>
                 </div>
                 <div class="col-3">
-                    <div class="row"><button type="button" class="btn btn-primary btn-sm" onclick="location.href='/update'">Update</button></div>
+                    <div class="row">
+                        {% if disabled == 'true' %}
+                            <button type="button" class="btn btn-primary btn-sm" disabled="disabled">Update</button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary btn-sm" onclick="location.href='/update'">Update</button>
+                        {% endif %}
+                    </div>
                     <div class="row">last update: {{ message.last_update }}</div>
                 </div>
             </div>

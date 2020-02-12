@@ -94,7 +94,7 @@ class CitrusDrop:
 
     # APIの残量とリセット時間をカウントし、送信制御する
     # TODO:threadingで回すようにする
-    async def update_followers_dict(self):
+    def update_followers_dict(self):
         # フォロワー数を取得
         if self.followers_count == -1:
             self.get_followers_count()
@@ -115,7 +115,7 @@ class CitrusDrop:
                 # リセット時刻まで待機
                 wait = ut_reset - ut_now
                 print("Waiting until", dt_reset, "from", dt_now, "wait time", wait, "sec")
-                await asyncio.sleep(wait)
+                time.sleep(wait)
 
         self.update_followers_dict_light()
 

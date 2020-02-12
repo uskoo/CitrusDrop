@@ -25,16 +25,18 @@ with open('./idol_name_list.json', 'r', encoding='utf-8') as f:
     idol_name_list = json.load(f)
 
 # TODO: Twitter認証処理後に、access_tokenと同時にid_strを取得して、CitrusDropを初期化する
+# 認証外すときの仮コードここから
 '''
 # 以下は仮のID
 twitter_user_id = '101991197'
 
 # CitrusDrop初期化
-# cd = CitrusDrop(consumer_key=ck, consumer_secret=cs, access_token=at,
-#               access_token_secret=ats, idol_name_list=idol_name_list, user_id=twitter_user_id)
+cd = CitrusDrop(consumer_key=ck, consumer_secret=cs, access_token=at,
+                access_token_secret=ats, idol_name_list=idol_name_list, user_id=twitter_user_id)
 
 # キャッシュがあったらとりあえず表示だけするためuser_infoをロードする処理
 path = './static/' + twitter_user_id + '.json'
+
 
 try:
     with open(path, 'r', encoding='utf-8') as f:
@@ -50,6 +52,8 @@ except FileNotFoundError:
         'result': []
     }
 '''
+# 認証外すときの仮コードここまで
+
 path = ''
 user_drop = {
         'screen_name': '未取得',
@@ -64,8 +68,8 @@ user_drop = {
 # TODO: updateを非同期にする
 @app.route('/update', methods=['GET'])
 def update():
-    loop = asyncio.get_event_loop()
-    loop.create_task(update_dict())
+    global loop
+    loop.run_until_complete(update_dict())
 
     title = "CitrusDrop"
     page = "index"
@@ -75,21 +79,17 @@ def update():
 
 async def update_dict():
     global cd
-    loop = asyncio.get_event_loop()
-    await loop.create_task(cd.update_followers_dict())
+    cd.update_followers_dict()
 
     global user_drop
     user_drop = cd.get_drop()
 
     global path
-    path = './static/' + request.args.get('user_id')
+    path = './static/' + user_drop['user_id'] + '.json'
     with open(path, 'w', encoding='utf-8') as f:
         f.write(json.dumps(user_drop, indent=4, ensure_ascii=False))
 
-    title = "CitrusDrop"
-    page = "index"
-
-    return render_template('main.html', title=title, message=user_drop, page=page)
+    return True
 
 
 # TODO: Twitter認証処理を入れる
@@ -183,16 +183,11 @@ def save_drop():
 def test():
     title = "CitrusDonut"
     page = "donut"
-    return url_for('test2', 'aaa', 'bbb')
-
-
-@app.route('/test2')
-def test2():
-    title = "CitrusDonut"
-    page = "donut"
     return render_template('main.html', title=title, message=user_drop, page=page)
 
 
 if __name__ == '__main__':
-    app.run()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(app.run())
+    # app.run()
 
