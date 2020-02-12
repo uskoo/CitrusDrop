@@ -107,6 +107,7 @@ class CitrusDrop:
             else:
                 # APIリセット時刻を取得(UNIX時刻)
                 self.get_rate_limit_status()
+                #print(self.rate_limit_status['resources']['followers']['/followers/list']['reset'])
                 ut_reset = self.rate_limit_status['resources']['followers']['/followers/list']['reset']
                 dt_reset = datetime.datetime.fromtimestamp(ut_reset)
                 # 現在時億を取得
