@@ -78,7 +78,7 @@ def update():
 
 async def update_dict():
     global cd
-    cd.update_followers_dict()
+    await cd.update_followers_dict()
 
     global user_drop
     user_drop = cd.get_drop()
