@@ -26,14 +26,14 @@ with open('./idol_name_list.json', 'r', encoding='utf-8') as f:
 
 # TODO: Twitter認証処理後に、access_tokenと同時にid_strを取得して、CitrusDropを初期化する
 # 認証外すときの仮コードここから
-'''
+
 # 以下は仮のID
-twitter_user_id = '101991197'
+#twitter_user_id = '101991197'
+twitter_user_id = '000000000'
 
 # CitrusDrop初期化
 cd = CitrusDrop(consumer_key=ck, consumer_secret=cs, access_token=at,
                 access_token_secret=ats, idol_name_list=idol_name_list, user_id=twitter_user_id)
-
 # キャッシュがあったらとりあえず表示だけするためuser_infoをロードする処理
 path = './static/' + twitter_user_id + '.json'
 
@@ -51,8 +51,6 @@ except FileNotFoundError:
         'friends_count': '未取得',
         'result': []
     }
-'''
-# 認証外すときの仮コードここまで
 
 path = ''
 user_drop = {
