@@ -10,6 +10,7 @@ from citrus_drop import CitrusDrop
 
 
 app = Flask(__name__)
+loop = asyncio.get_event_loop()
 
 ck = os.environ.get('TWITTER_CONSUMER_KEY')
 cs = os.environ.get('TWITTER_CONSUMER_SECRET')
@@ -185,7 +186,6 @@ def test():
 
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
     loop.run_until_complete(app.run())
     # app.run()
 
